@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #1A3636;
+  --color-brand-primary-dark: #0F2323;
+  --color-brand-gold: #C5A059;
+  --color-brand-bg: #FAF8F5;
+  --color-brand-card: #FFFFFF;
+  --color-brand-dark: #2C3E50;
+  --color-brand-muted: #5F6B6C;
+  --color-brand-border: #E5DFD5;
+  
+  --color-brand-low-stock: #B8860B;
+  --color-brand-sold-out: #8C4A4A;
+  --color-brand-success: #3E6259;
+  --color-brand-pending: #A08961;
+
+  --font-serif: "Playfair Display", Georgia, Cambria, serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Custom smooth scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF8F5;
+}
+::-webkit-scrollbar-thumb {
+  background: #E5DFD5;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C5A059;
+}
+
+.font-serif-title {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-sans-body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
