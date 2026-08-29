@@ -17,6 +17,7 @@ import { Product, ProductCategory, CartItem, Order, OrderStatus } from './types'
 import { INITIAL_PRODUCTS, INITIAL_ORDERS } from './data/initialData';
 import { Sparkles, Heart, ShieldCheck, Truck, Phone, MessageCircle } from 'lucide-react';
 import { MERCHANT_CONFIG } from './data/initialData';
+import { LoginModal } from './components/LoginModal';
 
 export default function App() {
   // Core Data State
@@ -33,6 +34,7 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
 
   // Fetch Products & Orders from Backend
@@ -113,6 +115,19 @@ export default function App() {
     setIsCheckoutOpen(false);
     setCompletedOrder(order);
     fetchOrders();
+  };
+
+  const handleAdminToggleClick = () => {
+    if (isAdminView) {
+      setIsAdminView(false);
+    } else {
+      setIsLoginModalOpen(true);
+    }
+  };
+
+  const handleLoginSuccess = () => {
+    setIsAdminView(true);
+    setIsLoginModalOpen(false);
   };
 
   // Admin Order Status Update (Triggers Stock Decrement on 'Confirmed' - FR-07)
@@ -203,7 +218,7 @@ export default function App() {
         cartCount={totalCartCount}
         onOpenCart={() => setIsCartOpen(true)}
         isAdminView={isAdminView}
-        onToggleAdminView={() => setIsAdminView(!isAdminView)}
+        onToggleAdminView={handleAdminToggleClick}
         pendingOrdersCount={pendingOrdersCount}
       />
 
@@ -394,7 +409,11 @@ export default function App() {
         order={completedOrder}
         onClose={() => setCompletedOrder(null)}
       />
-
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
       {/* Sticky Mobile Anchor Bar */}
       {!isAdminView && (
         <MobileStickyBar

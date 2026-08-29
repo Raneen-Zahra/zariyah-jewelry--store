@@ -3,6 +3,8 @@ import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import { INITIAL_PRODUCTS, INITIAL_ORDERS } from './src/data/initialData';
 import { Product, Order, OrderStatus } from './src/types';
+import 'dotenv/config';
+import bcrypt from 'bcrypt'; // which package did you install for hashing?
 
 // In-Memory Database for local & MVP runtime (Schema matches MongoDB M0 Document Specification)
 let productsDb: Product[] = JSON.parse(JSON.stringify(INITIAL_PRODUCTS));
@@ -32,8 +34,8 @@ async function startServer() {
         title: req.body.title || 'Untitled Jewelry Piece',
         price_pkr: Number(req.body.price_pkr) || 0,
         description: req.body.description || '',
-        images: Array.isArray(req.body.images) && req.body.images.length > 0 
-          ? req.body.images 
+        images: Array.isArray(req.body.images) && req.body.images.length > 0
+          ? req.body.images
           : ['https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80'],
         stock_quantity: Number(req.body.stock_quantity) || 0,
         category: req.body.category || 'Necklaces & Chokers',
@@ -175,18 +177,28 @@ async function startServer() {
   });
 
   // API Route: Admin Authentication (FR-08)
-  app.post('/api/auth/login', (req: Request, res: Response) => {
+  app.post('/api/auth/login', async (req: Request, res: Response) => {
     const { username, password } = req.body;
-    // Default Owner credentials
-    if ((username === 'admin' || username === 'owner' || username === 'zariyah') && (password === 'admin123' || password === 'zariyah2026')) {
+
+    const isUsernameValid = username === process.env.ADMIN_USERNAME; // which env variable holds the real username?
+
+    const isPasswordValid = await bcrypt.compare(password, process.env.ADMIN_PASSWORD_HASH || '');
+    // ^ which bcrypt method compares a plain password against a hash?
+    // ^ which env variable holds the hash?
+    console.log('DEBUG — env username:', JSON.stringify(process.env.ADMIN_USERNAME));
+    console.log('DEBUG — received username:', JSON.stringify(username));
+    console.log('DEBUG — username match:', isUsernameValid);
+    console.log('DEBUG — password match:', isPasswordValid);
+
+    if (isUsernameValid && isPasswordValid) {
       return res.json({
         success: true,
         user: {
           id: 'admin-owner-01',
-          username: 'zariyah_owner',
-          role: 'owner' // Role field preserved for future staff accounts (FR-08)
+          username: process.env.ADMIN_USERNAME, // reuse the same env var as above
+          role: 'owner'
         },
-        token: 'auth-token-owner-secure'
+        token: `temp-session-${Date.now()}` // what should replace the fake static token, for now?
       });
     }
 
