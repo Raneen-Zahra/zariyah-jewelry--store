@@ -4,7 +4,7 @@ import { Lock, X } from 'lucide-react';
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLoginSuccess: () => void;
+  onLoginSuccess: (token: string) => void;
 }
 
 export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLoginSuccess }) => {
@@ -29,7 +29,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
       if (data.success) {
         setUsername('');
         setPassword('');
-        onLoginSuccess();
+        onLoginSuccess(data.token);
       } else {
         setError(data.message || 'Invalid credentials');
       }

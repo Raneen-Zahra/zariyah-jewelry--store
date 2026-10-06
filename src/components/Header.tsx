@@ -2,6 +2,7 @@ import React from 'react';
 import { ShoppingBag, Search, Sparkles, ShieldCheck, Phone, LayoutDashboard, Store } from 'lucide-react';
 import { ProductCategory } from '../types';
 import { MERCHANT_CONFIG } from '../data/initialData';
+import atelierLogo from '../assets/LC_Atelier_By_Laraib_logo.jpeg';
 
 interface HeaderProps {
   currentCategory: ProductCategory;
@@ -17,13 +18,10 @@ interface HeaderProps {
 
 const CATEGORIES: ProductCategory[] = [
   'All',
-  'Bridal Sets',
-  'Necklaces & Chokers',
-  'Earrings & Jhumkas',
   'Rings',
-  'Bangles & Bracelets',
-  'Pendants & Chains',
-  'Anklets'
+  'Earrings',
+  'Lockets',
+  'Bangles'
 ];
 
 export const Header: React.FC<HeaderProps> = ({
@@ -47,8 +45,6 @@ export const Header: React.FC<HeaderProps> = ({
               <Sparkles className="w-3.5 h-3.5" />
               Express Delivery Across Pakistan
             </span>
-            <span className="hidden md:inline text-gray-300">|</span>
-            <span className="hidden md:inline text-gray-300">Free delivery on orders over Rs. 15,000</span>
           </div>
 
           <div className="flex items-center gap-4">
@@ -62,28 +58,7 @@ export const Header: React.FC<HeaderProps> = ({
               <Phone className="w-3 h-3" />
               <span>WhatsApp: {MERCHANT_CONFIG.whatsappDisplay}</span>
             </a>
-            <button
-              id="admin-toggle-button"
-              onClick={onToggleAdminView}
-              className="flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#C5A059]/20 hover:bg-[#C5A059]/30 text-[#C5A059] font-medium border border-[#C5A059]/40 transition-colors"
-            >
-              {isAdminView ? (
-                <>
-                  <Store className="w-3 h-3" />
-                  <span>Customer Store</span>
-                </>
-              ) : (
-                <>
-                  <LayoutDashboard className="w-3 h-3" />
-                  <span>Admin Hub</span>
-                  {pendingOrdersCount > 0 && (
-                    <span className="bg-[#B8860B] text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold animate-pulse">
-                      {pendingOrdersCount}
-                    </span>
-                  )}
-                </>
-              )}
-            </button>
+            
           </div>
         </div>
       </div>
@@ -100,19 +75,20 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             className="cursor-pointer flex items-center gap-2 group"
           >
-            <div className="w-9 h-9 rounded-full bg-[#1A3636] border border-[#C5A059] flex items-center justify-center text-[#C5A059] shadow-sm group-hover:bg-[#0F2323] transition-colors">
-              <span className="font-serif-title font-bold text-lg">Z</span>
-            </div>
+            <img
+              src={atelierLogo}
+              alt="Atelier by Laraib Chouhdary"
+              className="w-10 h-10 rounded-full object-cover border border-[#C5A059]"
+            />
             <div>
               <span className="font-serif-title text-xl sm:text-2xl font-bold tracking-tight text-[#1A3636] block leading-none">
-                ZARIYAH
+                LC ATELIER
               </span>
               <span className="text-[10px] tracking-widest uppercase text-[#5F6B6C] font-medium">
-                Fine Jewelry • Pakistan
+                by Laraib Chouhdary
               </span>
             </div>
           </div>
-
           {/* Search Bar */}
           {!isAdminView && (
             <div id="search-container" className="flex-1 max-w-md hidden sm:block relative">
@@ -121,7 +97,7 @@ export const Header: React.FC<HeaderProps> = ({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search rings, polki chokers, jhumkas, bridal sets..."
+                placeholder="Search products..."
                 className="w-full bg-white pl-9 pr-4 py-2 text-sm rounded-full border border-[#E5DFD5] focus:outline-none focus:border-[#C5A059] focus:ring-1 focus:ring-[#C5A059] transition-all text-[#2C3E50] placeholder:text-gray-400 shadow-xs"
               />
               <Search className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
@@ -184,11 +160,10 @@ export const Header: React.FC<HeaderProps> = ({
                   key={cat}
                   id={`category-pill-${cat.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
                   onClick={() => onSelectCategory(cat)}
-                  className={`px-3.5 py-1 text-xs font-medium rounded-full transition-all whitespace-nowrap ${
-                    isSelected
-                      ? 'bg-[#1A3636] text-[#FAF8F5] shadow-xs'
-                      : 'text-[#5F6B6C] hover:text-[#1A3636] hover:bg-[#FAF8F5]'
-                  }`}
+                  className={`px-3.5 py-1 text-xs font-medium rounded-full transition-all whitespace-nowrap ${isSelected
+                    ? 'bg-[#1A3636] text-[#FAF8F5] shadow-xs'
+                    : 'text-[#5F6B6C] hover:text-[#1A3636] hover:bg-[#FAF8F5]'
+                    }`}
                 >
                   {cat}
                 </button>

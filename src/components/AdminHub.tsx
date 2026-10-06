@@ -31,11 +31,13 @@ import {
 } from '../utils/formatters';
 import { playOrderAlertChime } from '../utils/audio';
 import { AdminReceiptModal } from './AdminReceiptModal';
+import atelierLogo from '../assets/LC_Atelier_By_Laraib_logo.jpeg';
 
 interface AdminHubProps {
   products: Product[];
   orders: Order[];
   onRefreshOrders: () => void;
+  onDeleteOrder: (orderId: string) => Promise<void>;
   onUpdateOrderStatus: (orderId: string, newStatus: OrderStatus) => Promise<void>;
   onAddProduct: (product: Partial<Product>) => Promise<void>;
   onUpdateProduct: (productId: string, updates: Partial<Product>) => Promise<void>;
@@ -44,13 +46,10 @@ interface AdminHubProps {
 
 const CATEGORIES: ProductCategory[] = [
   'All',
-  'Bridal Sets',
-  'Necklaces & Chokers',
-  'Earrings & Jhumkas',
+  'Lockets',
+  'Earrings',
   'Rings',
-  'Bangles & Bracelets',
-  'Pendants & Chains',
-  'Anklets'
+  'Bangles'
 ];
 
 export const AdminHub: React.FC<AdminHubProps> = ({
@@ -60,16 +59,17 @@ export const AdminHub: React.FC<AdminHubProps> = ({
   onUpdateOrderStatus,
   onAddProduct,
   onUpdateProduct,
+  onDeleteOrder,
   onDeleteProduct
 }) => {
   // Admin Auth State (FR-08)
   const [currentUser, setCurrentUser] = useState<AdminUser | null>({
     id: 'admin-owner-01',
-    username: 'zariyah_owner',
+    username: 'atelier_owner',
     role: 'owner' // role field preserved for future staff accounts (FR-08)
   });
 
-  const [loginUsername, setLoginUsername] = useState('owner');
+  const [loginUsername, setLoginUsername] = useState('atelier_owner');
   const [loginPassword, setLoginPassword] = useState('laraibCH');
   const [loginError, setLoginError] = useState('');
 
@@ -92,22 +92,23 @@ export const AdminHub: React.FC<AdminHubProps> = ({
   const [inventoryCategoryFilter, setInventoryCategoryFilter] = useState<ProductCategory>('All');
   const [isAddProductOpen, setIsAddProductOpen] = useState<boolean>(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
 
   // Product Form State
   const [productForm, setProductForm] = useState<Partial<Product>>({
     title: '',
-    price_pkr: 15000,
+    price_pkr: 250,
     description: '',
-    category: 'Necklaces & Chokers',
+    category: 'Rings',
     stock_quantity: 5,
     low_stock_threshold: 5,
-    images: ['https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80'],
+    images: [],
     is_published: true,
     specs: {
-      metalPurity: '22K Gold Plated Brass',
-      stoneType: 'Uncut Polki & Kundan Stones',
-      weightGrams: 45,
-      craftsmanship: 'Handcrafted'
+      metalPurity: '',
+      stoneType: '',
+      weightGrams: 0,
+      craftsmanship: ''
     }
   });
 
@@ -172,20 +173,51 @@ export const AdminHub: React.FC<AdminHubProps> = ({
     // Reset
     setProductForm({
       title: '',
-      price_pkr: 15000,
+      price_pkr: 250,
       description: '',
-      category: 'Necklaces & Chokers',
+      category: 'Lockets',
       stock_quantity: 5,
       low_stock_threshold: 5,
-      images: ['https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80'],
+      images: [],
       is_published: true,
       specs: {
-        metalPurity: '22K Gold Plated Brass',
-        stoneType: 'Uncut Polki & Kundan Stones',
-        weightGrams: 45,
-        craftsmanship: 'Handcrafted'
+        metalPurity: '',
+        stoneType: '',
+        weightGrams: 0,
+        craftsmanship: ''
       }
     });
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const res = await fetch('/api/upload-image', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        },
+        body: formData
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setProductForm({ ...productForm, images: [data.url] });
+      } else {
+        alert(data.message || 'Image upload failed');
+      }
+    } catch (err) {
+      console.error('Upload error:', err);
+      alert('Image upload failed, please try again');
+    } finally {
+      setIsUploadingImage(false);
+    }
   };
 
   const startEditProduct = (prod: Product) => {
@@ -219,9 +251,11 @@ export const AdminHub: React.FC<AdminHubProps> = ({
     return (
       <div className="max-w-md mx-auto my-16 p-8 bg-white rounded-2xl border border-[#E5DFD5] shadow-xl text-xs space-y-5">
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 bg-[#1A3636] text-[#C5A059] rounded-full flex items-center justify-center mx-auto text-xl font-serif-title font-bold">
-            Z
-          </div>
+          <img
+            src={atelierLogo}
+            alt="Atelier by Laraib Chouhdary"
+            className="w-10 h-10 rounded-full object-cover border border-[#C5A059]"
+          />
           <h2 className="font-serif-title text-xl font-bold text-[#1A3636]">
             Store Owner Authentication
           </h2>
@@ -277,9 +311,11 @@ export const AdminHub: React.FC<AdminHubProps> = ({
       {/* Top Admin Control Bar */}
       <div className="bg-white rounded-2xl border border-[#E5DFD5] p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#1A3636] text-[#C5A059] flex items-center justify-center font-serif-title font-bold text-lg">
-            Z
-          </div>
+          <img
+            src={atelierLogo}
+            alt="Atelier by Laraib Chouhdary"
+            className="w-10 h-10 rounded-xl object-cover border border-[#C5A059]"
+          />
           <div>
             <div className="flex items-center gap-2">
               <h1 className="font-serif-title font-bold text-lg sm:text-xl text-[#1A3636]">
@@ -318,11 +354,10 @@ export const AdminHub: React.FC<AdminHubProps> = ({
               setAudioEnabled(next);
               if (next) playOrderAlertChime();
             }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors ${
-              audioEnabled
-                ? 'bg-[#3E6259]/10 border-[#3E6259]/40 text-[#3E6259]'
-                : 'bg-gray-100 border-gray-300 text-gray-400'
-            }`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors ${audioEnabled
+              ? 'bg-[#3E6259]/10 border-[#3E6259]/40 text-[#3E6259]'
+              : 'bg-gray-100 border-gray-300 text-gray-400'
+              }`}
           >
             {audioEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
             <span>{audioEnabled ? 'Chime Alert On' : 'Chime Muted'}</span>
@@ -341,11 +376,10 @@ export const AdminHub: React.FC<AdminHubProps> = ({
         <button
           id="admin-tab-orders"
           onClick={() => setActiveTab('orders')}
-          className={`pb-3 font-serif-title font-bold text-sm sm:text-base flex items-center gap-2 border-b-2 transition-colors ${
-            activeTab === 'orders'
-              ? 'border-[#1A3636] text-[#1A3636]'
-              : 'border-transparent text-[#5F6B6C] hover:text-[#1A3636]'
-          }`}
+          className={`pb-3 font-serif-title font-bold text-sm sm:text-base flex items-center gap-2 border-b-2 transition-colors ${activeTab === 'orders'
+            ? 'border-[#1A3636] text-[#1A3636]'
+            : 'border-transparent text-[#5F6B6C] hover:text-[#1A3636]'
+            }`}
         >
           <Package className="w-4 h-4 text-[#C5A059]" />
           <span>Orders Management ({orders.length})</span>
@@ -359,11 +393,10 @@ export const AdminHub: React.FC<AdminHubProps> = ({
         <button
           id="admin-tab-inventory"
           onClick={() => setActiveTab('inventory')}
-          className={`pb-3 font-serif-title font-bold text-sm sm:text-base flex items-center gap-2 border-b-2 transition-colors ${
-            activeTab === 'inventory'
-              ? 'border-[#1A3636] text-[#1A3636]'
-              : 'border-transparent text-[#5F6B6C] hover:text-[#1A3636]'
-          }`}
+          className={`pb-3 font-serif-title font-bold text-sm sm:text-base flex items-center gap-2 border-b-2 transition-colors ${activeTab === 'inventory'
+            ? 'border-[#1A3636] text-[#1A3636]'
+            : 'border-transparent text-[#5F6B6C] hover:text-[#1A3636]'
+            }`}
         >
           <Layers className="w-4 h-4 text-[#C5A059]" />
           <span>Jewelry Inventory & Stock ({products.length})</span>
@@ -388,11 +421,10 @@ export const AdminHub: React.FC<AdminHubProps> = ({
                 <button
                   key={st.id}
                   onClick={() => setOrderStatusFilter(st.id)}
-                  className={`px-3 py-1 text-xs rounded-full font-medium whitespace-nowrap transition-colors ${
-                    orderStatusFilter === st.id
-                      ? 'bg-[#1A3636] text-white font-bold'
-                      : 'bg-[#FAF8F5] text-[#5F6B6C] hover:bg-gray-200'
-                  }`}
+                  className={`px-3 py-1 text-xs rounded-full font-medium whitespace-nowrap transition-colors ${orderStatusFilter === st.id
+                    ? 'bg-[#1A3636] text-white font-bold'
+                    : 'bg-[#FAF8F5] text-[#5F6B6C] hover:bg-gray-200'
+                    }`}
                 >
                   {st.label}
                 </button>
@@ -425,12 +457,13 @@ export const AdminHub: React.FC<AdminHubProps> = ({
                     <th className="px-4 py-3">Status</th>
                     <th className="px-4 py-3">1-Click WhatsApp Engine</th>
                     <th className="px-4 py-3 text-right">Update Status</th>
+                    <th className="px-4 py-3 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E5DFD5]/60 text-[#2C3E50]">
                   {filteredOrders.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="px-6 py-12 text-center text-[#5F6B6C]">
+                      <td colSpan={8} className="px-6 py-12 text-center text-[#5F6B6C]">
                         No orders match the selected filter.
                       </td>
                     </tr>
@@ -444,9 +477,8 @@ export const AdminHub: React.FC<AdminHubProps> = ({
                         <tr
                           key={order.order_id}
                           id={`admin-order-row-${order.order_id}`}
-                          className={`hover:bg-[#FAF8F5]/60 transition-colors ${
-                            order.order_status === 'pending' ? 'bg-[#FAF8F5]/40' : ''
-                          }`}
+                          className={`hover:bg-[#FAF8F5]/60 transition-colors ${order.order_status === 'pending' ? 'bg-[#FAF8F5]/40' : ''
+                            }`}
                         >
                           {/* Order ID & Time */}
                           <td className="px-4 py-3.5 align-top">
@@ -513,19 +545,18 @@ export const AdminHub: React.FC<AdminHubProps> = ({
                           {/* Status Badge */}
                           <td className="px-4 py-3.5 align-top">
                             <span
-                              className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                                order.order_status === 'pending'
-                                  ? 'bg-[#A08961]/20 text-[#A08961] border border-[#A08961]/40 animate-pulse'
-                                  : order.order_status === 'payment_verified'
+                              className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${order.order_status === 'pending'
+                                ? 'bg-[#A08961]/20 text-[#A08961] border border-[#A08961]/40 animate-pulse'
+                                : order.order_status === 'payment_verified'
                                   ? 'bg-blue-100 text-blue-800'
                                   : order.order_status === 'confirmed'
-                                  ? 'bg-[#3E6259]/20 text-[#3E6259] border border-[#3E6259]/40'
-                                  : order.order_status === 'dispatched'
-                                  ? 'bg-purple-100 text-purple-800'
-                                  : order.order_status === 'delivered'
-                                  ? 'bg-green-100 text-green-800'
-                                  : 'bg-gray-100 text-gray-600'
-                              }`}
+                                    ? 'bg-[#3E6259]/20 text-[#3E6259] border border-[#3E6259]/40'
+                                    : order.order_status === 'dispatched'
+                                      ? 'bg-purple-100 text-purple-800'
+                                      : order.order_status === 'delivered'
+                                        ? 'bg-green-100 text-green-800'
+                                        : 'bg-gray-100 text-gray-600'
+                                }`}
                             >
                               {order.order_status.replace('_', ' ')}
                             </span>
@@ -597,6 +628,19 @@ export const AdminHub: React.FC<AdminHubProps> = ({
                               <option value="cancelled">Cancelled</option>
                             </select>
                           </td>
+                          {/* Delete Order Action */}
+                          <td className="px-4 py-3.5 align-top text-right">
+                            <button
+                              onClick={() => {
+                                if (window.confirm(`Delete order ${order.order_id}? This cannot be undone.`)) {
+                                  onDeleteOrder(order.order_id);
+                                }
+                              }}
+                              className="px-2.5 py-1 rounded-md bg-[#8C4A4A]/10 hover:bg-[#8C4A4A]/20 text-[#8C4A4A] font-semibold text-[11px] border border-[#8C4A4A]/25 transition-colors"
+                            >
+                              Delete
+                            </button>
+                          </td>
                         </tr>
                       );
                     })
@@ -618,11 +662,10 @@ export const AdminHub: React.FC<AdminHubProps> = ({
                 <button
                   key={cat}
                   onClick={() => setInventoryCategoryFilter(cat)}
-                  className={`px-3 py-1 text-xs rounded-full font-medium whitespace-nowrap ${
-                    inventoryCategoryFilter === cat
-                      ? 'bg-[#1A3636] text-white font-bold'
-                      : 'bg-[#FAF8F5] text-[#5F6B6C] hover:bg-gray-200'
-                  }`}
+                  className={`px-3 py-1 text-xs rounded-full font-medium whitespace-nowrap ${inventoryCategoryFilter === cat
+                    ? 'bg-[#1A3636] text-white font-bold'
+                    : 'bg-[#FAF8F5] text-[#5F6B6C] hover:bg-gray-200'
+                    }`}
                 >
                   {cat}
                 </button>
@@ -805,7 +848,7 @@ export const AdminHub: React.FC<AdminHubProps> = ({
               <div>
                 <label className="block font-semibold text-[#2C3E50] mb-1">Category</label>
                 <select
-                  value={productForm.category || 'Bridal Sets'}
+                  value={productForm.category || 'Rings'}
                   onChange={(e) =>
                     setProductForm({ ...productForm, category: e.target.value as ProductCategory })
                   }
@@ -820,13 +863,33 @@ export const AdminHub: React.FC<AdminHubProps> = ({
               </div>
 
               <div>
-                <label className="block font-semibold text-[#2C3E50] mb-1">Image URL</label>
+                <label className="block font-semibold text-[#2C3E50] mb-1">Product Image</label>
+
+                {productForm.images?.[0] && (
+                  <img
+                    src={productForm.images[0]}
+                    alt="Preview"
+                    className="w-20 h-20 rounded-lg object-cover border border-[#E5DFD5] mb-2"
+                  />
+                )}
+
+                <div className="relative border-2 border-dashed border-[#E5DFD5] hover:border-[#C5A059] rounded-lg p-3 text-center bg-[#FAF8F5] transition-colors cursor-pointer">
+                  <input
+                    type="file"
+                    accept="image/png, image/jpeg, image/jpg"
+                    onChange={handleImageUpload}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <span className="text-[11px] text-[#5F6B6C]">
+                    {isUploadingImage ? 'Uploading...' : 'Click to upload a photo from your device'}
+                  </span>
+                </div>
+
+                <label className="block font-semibold text-[#2C3E50] mt-2 mb-1">Or paste an image URL</label>
                 <input
                   type="text"
                   value={productForm.images?.[0] || ''}
-                  onChange={(e) =>
-                    setProductForm({ ...productForm, images: [e.target.value] })
-                  }
+                  onChange={(e) => setProductForm({ ...productForm, images: [e.target.value] })}
                   placeholder="https://images.unsplash.com/..."
                   className="w-full px-3.5 py-2 rounded-lg border border-[#E5DFD5] focus:outline-none focus:border-[#C5A059]"
                 />

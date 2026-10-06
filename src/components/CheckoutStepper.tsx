@@ -42,7 +42,7 @@ export const CheckoutStepper: React.FC<CheckoutStepperProps> = ({
     customer_name: '',
     whatsapp_phone: '',
     address_line: '',
-    city: 'Lahore',
+    city: 'Bhakkar',
     payment_method: 'EasyPaisa',
     transaction_id: '',
     receipt_image_file: null,
@@ -488,7 +488,7 @@ export const CheckoutStepper: React.FC<CheckoutStepperProps> = ({
                         EP
                       </div>
                       <div>
-                        <div className="font-bold text-xs sm:text-sm text-[#1A3636]">EasyPaisa Wallet / Till</div>
+                        <div className="font-bold text-xs sm:text-sm text-[#1A3636]">EasyPaisa Wallet</div>
                         <div className="text-[11px] text-[#5F6B6C]">Instant direct mobile transfer</div>
                       </div>
                     </div>
@@ -518,10 +518,6 @@ export const CheckoutStepper: React.FC<CheckoutStepperProps> = ({
                           </button>
                         </div>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-[#5F6B6C]">Till ID:</span>
-                        <span className="font-mono font-bold">{MERCHANT_CONFIG.paymentAccounts.easypaisa.tillNumber}</span>
-                      </div>
                       <p className="text-[11px] text-[#5F6B6C] italic pt-1">
                         {MERCHANT_CONFIG.paymentAccounts.easypaisa.instructions}
                       </p>
@@ -529,9 +525,9 @@ export const CheckoutStepper: React.FC<CheckoutStepperProps> = ({
                   )}
                 </div>
 
-                {/* JazzCash */}
+                {/* JazzCash
                 <div
-                  onClick={() => setFormData({ ...formData, payment_method: 'JazzCash' })}
+                  onClick={() => setFormData({ ...formData, payment_method: '' })}
                   className={`p-4 rounded-xl border cursor-pointer transition-all ${
                     formData.payment_method === 'JazzCash'
                       ? 'border-[#1A3636] bg-[#FAF8F5] ring-2 ring-[#C5A059]/40'
@@ -579,9 +575,9 @@ export const CheckoutStepper: React.FC<CheckoutStepperProps> = ({
                       </p>
                     </div>
                   )}
-                </div>
+                </div> */}
 
-                {/* Cash on Delivery */}
+                Cash on Delivery
                 <div
                   onClick={() => setFormData({ ...formData, payment_method: 'COD' })}
                   className={`p-4 rounded-xl border cursor-pointer transition-all ${

@@ -3,163 +3,154 @@ import { Product, Order } from '../types';
 export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 'prod-01',
-    title: 'Maharani Polki Kundan Bridal Set',
-    price_pkr: 42500,
-    description: 'An opulent 22K antique gold-plated bridal set adorned with handcrafted uncut Polki stones, emerald quartz drops, and lustrous baroque pearls. Includes majestic choker, matching jhumkas, and intricate maang tikka.',
+    title: 'Sunburst Adjustable Ring',
+    price_pkr: 950,
+    description: 'A minimalist gold-tone adjustable ring with a subtle sunburst engraving. Fits most sizes and pairs easily with everyday outfits.',
     images: [
-      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&w=1000&q=80'
+      'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1000&q=80'
     ],
-    stock_quantity: 3, // Low stock: triggers "Only 3 Left!"
-    category: 'Bridal Sets',
-    is_published: true,
-    low_stock_threshold: 5,
-    specs: {
-      metalPurity: '22K Antique Gold Micro-Plating over Brass',
-      stoneType: 'Hydro Emeralds, Uncut Polki, Basra Pearl Drops',
-      weightGrams: 145,
-      craftsmanship: 'Hand-strung with pure silk dori cord'
-    }
-  },
-  {
-    id: 'prod-02',
-    title: 'Noor Emerald & Pearl Choker',
-    price_pkr: 16800,
-    description: 'Elegant Mughal-inspired collar choker featuring deep bottle-green emerald baguettes lined with delicate freshwater seed pearls. Perfect for festive soirees and mehndi occasions.',
-    images: [
-      'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?auto=format&fit=crop&w=1000&q=80'
-    ],
-    stock_quantity: 4, // Low stock: triggers "Only 4 Left!"
-    category: 'Necklaces & Chokers',
-    is_published: true,
-    low_stock_threshold: 5,
-    specs: {
-      metalPurity: '18K Yellow Gold Plating',
-      stoneType: 'Faceted Emerald Simulants & Cultured Seed Pearls',
-      weightGrams: 58,
-      craftsmanship: 'Adjustable zari tassel closure'
-    }
-  },
-  {
-    id: 'prod-03',
-    title: 'Chandbali Polki Jhumkas with Ruby Accents',
-    price_pkr: 9500,
-    description: 'Classic crescent Chandbali silhouette layered with intricate filigree, dangling pearls, and miniature cabochon ruby center stones. Lightweight yet dramatic statement earrings.',
-    images: [
-      'https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1629224316810-9d8805b95e76?auto=format&fit=crop&w=1000&q=80'
-    ],
-    stock_quantity: 8, // Normal stock
-    category: 'Earrings & Jhumkas',
-    is_published: true,
-    low_stock_threshold: 5,
-    specs: {
-      metalPurity: 'Brass with 24K Micron Gold Dip',
-      stoneType: 'Kundan Glass, Ruby Quartz, Pearl Beads',
-      weightGrams: 32,
-      craftsmanship: 'Push-back clip mechanism with support loops'
-    }
-  },
-  {
-    id: 'prod-04',
-    title: 'Gulrukh Meenakari Statement Ring',
-    price_pkr: 5200,
-    description: 'Cocktail oversized finger ring showcasing detailed Persian blue and crimson enamel Meenakari work on the reverse side with a radiant Moissanite polki centerpiece.',
-    images: [
-      'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=1000&q=80'
-    ],
-    stock_quantity: 2, // Low stock: triggers "Only 2 Left!"
+    stock_quantity: 12,
     category: 'Rings',
     is_published: true,
     low_stock_threshold: 5,
     specs: {
-      metalPurity: 'Sterling Silver 925 Base',
-      stoneType: 'Moissanite Polki & Hand Enamel (Meenakari)',
-      weightGrams: 18,
-      craftsmanship: 'Adjustable comfort-fit band'
+      metalPurity: 'Gold-Plated Brass',
+      stoneType: 'None',
+      weightGrams: 4,
+      craftsmanship: 'Adjustable open-back band'
+    }
+  },
+  {
+    id: 'prod-02',
+    title: 'Pearl Duo Stacking Ring',
+    price_pkr: 1200,
+    description: 'Two slim bands finished with tiny faux-pearl accents, designed to be worn together or separately for a layered look.',
+    images: [
+      'https://images.unsplash.com/photo-1603561596112-0a132b757442?auto=format&fit=crop&w=1000&q=80'
+    ],
+    stock_quantity: 6, // Low stock: "Only 3 Left!"
+    category: 'Rings',
+    is_published: true,
+    low_stock_threshold: 5,
+    specs: {
+      metalPurity: 'Stainless Steel, Gold Tone',
+      stoneType: 'Faux Pearl',
+      weightGrams: 3,
+      craftsmanship: 'Sold as a set of 2 stacking bands'
+    }
+  },
+  {
+    id: 'prod-03',
+    title: 'Golden Hoop Studs',
+    price_pkr: 750,
+    description: 'Small everyday hoop earrings with a smooth polished finish — lightweight enough for all-day wear.',
+    images: [
+      'https://images.unsplash.com/photo-1630019925601-99e00ae5b1a1?auto=format&fit=crop&w=1000&q=80'
+    ],
+    stock_quantity: 20,
+    category: 'Earrings',
+    is_published: true,
+    low_stock_threshold: 5,
+    specs: {
+      metalPurity: 'Gold-Plated Stainless Steel',
+      stoneType: 'None',
+      weightGrams: 2,
+      craftsmanship: 'Hinged snap closure'
+    }
+  },
+  {
+    id: 'prod-04',
+    title: 'Dainty Pearl Drop Earrings',
+    price_pkr: 890,
+    description: 'A single freshwater-style pearl drop on a thin gold-tone hook — a simple, versatile everyday piece.',
+    images: [
+      'https://images.unsplash.com/photo-1633810542706-1f68be69ecb1?auto=format&fit=crop&w=1000&q=80'
+    ],
+    stock_quantity: 10, // Sold out
+    category: 'Earrings',
+    is_published: true,
+    low_stock_threshold: 5,
+    specs: {
+      metalPurity: 'Gold-Plated Alloy',
+      stoneType: 'Faux Pearl',
+      weightGrams: 2,
+      craftsmanship: 'Fish-hook backing'
     }
   },
   {
     id: 'prod-05',
-    title: 'Zahra Filigree Kara Bangles (Pair)',
-    price_pkr: 18500,
-    description: 'A magnificent pair of traditional openable Karas embellished with open-cut lattice wirework, floral motifs, and bezel-set champagne zircon stones.',
+    title: 'Heart Charm Locket Necklace',
+    price_pkr: 1450,
+    description: 'A dainty heart-shaped locket on a delicate chain, small enough to layer with other necklaces or wear alone.',
     images: [
-      'https://images.unsplash.com/photo-1611591477759-a29285223049?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1611591477840-025a1e7fce90?auto=format&fit=crop&w=1000&q=80'
+      'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1000&q=80'
     ],
-    stock_quantity: 0, // SOLD OUT: triggers "Sold Out" tag and disabled add-to-cart
-    category: 'Bangles & Bracelets',
+    stock_quantity: 15,
+    category: 'Lockets',
     is_published: true,
     low_stock_threshold: 5,
     specs: {
-      metalPurity: '22K Matte Gold Finish',
-      stoneType: 'Champagne Cubic Zirconia',
-      weightGrams: 74,
-      craftsmanship: 'Screw clasp mechanism (Size 2.6 standard)'
+      metalPurity: 'Gold-Plated Brass',
+      stoneType: 'None',
+      weightGrams: 6,
+      craftsmanship: '18-inch chain with lobster clasp'
     }
   },
   {
     id: 'prod-06',
-    title: 'Afreen Solitaire Moissanite Pendant',
-    price_pkr: 12900,
-    description: 'A timeless 2.0 carat round brilliant Moissanite floating pendant nestled in a 6-prong platinum-plated silver cage, suspended on an Italian diamond-cut box chain.',
+    title: 'Initial Letter Pendant Necklace',
+    price_pkr: 1100,
+    description: 'A single-letter pendant on a thin chain — a simple personal touch for everyday wear.',
     images: [
-      'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?auto=format&fit=crop&w=1000&q=80'
+      'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1000&q=80'
     ],
-    stock_quantity: 6, // Normal stock
-    category: 'Pendants & Chains',
+    stock_quantity: 8, // Low stock: "Only 4 Left!"
+    category: 'Lockets',
     is_published: true,
     low_stock_threshold: 5,
     specs: {
-      metalPurity: '925 Sterling Silver with Rhodium Polish',
-      stoneType: 'VVS1 Colorless Moissanite (GRA Certified)',
-      weightGrams: 8.5,
-      craftsmanship: '18-inch adjustable cable chain included'
+      metalPurity: 'Gold-Plated Alloy',
+      stoneType: 'None',
+      weightGrams: 3,
+      craftsmanship: '16-inch adjustable chain'
     }
   },
   {
     id: 'prod-07',
-    title: 'Daria Vintage Ghungroo Anklets (Payal)',
-    price_pkr: 7800,
-    description: 'Exquisite antique oxidized silver payal adorned with handcrafted tiny chime bells (ghungroos) and semi-precious turquoise stone inlays.',
+    title: 'Stackable Thin Bangles (Set of 3)',
+    price_pkr: 1650,
+    description: 'Three slim stackable bangles in matching gold tone — easy to mix, match, and wear daily.',
     images: [
-      'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80'
+      'https://images.unsplash.com/photo-1611591477759-a29285223049?auto=format&fit=crop&w=1000&q=80'
     ],
-    stock_quantity: 1, // Low stock: triggers "Only 1 Left!"
-    category: 'Anklets',
+    stock_quantity: 10,
+    category: 'Bangles',
     is_published: true,
     low_stock_threshold: 5,
     specs: {
-      metalPurity: 'German Silver with Antique Patina',
-      stoneType: 'Tibetan Turquoise Beads & Brass Bells',
-      weightGrams: 45,
-      craftsmanship: 'S-hook secure latch closure'
+      metalPurity: 'Gold-Plated Brass',
+      stoneType: 'None',
+      weightGrams: 20,
+      craftsmanship: 'Open-cuff, one-size-fits-most'
     }
   },
   {
     id: 'prod-08',
-    title: 'Surayya Sapphire & Pearl Drop Mala',
-    price_pkr: 24000,
-    description: 'Multi-strand layered pearl mala necklace accented with royal blue sapphire cabochon connectors and delicate pearl fringe drops. Designed for royal wedding celebrations.',
+    title: 'Beaded Charm Bangle',
+    price_pkr: 980,
+    description: 'A single bangle with small beaded detailing and a tiny charm accent — a subtle everyday statement piece.',
     images: [
-      'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&w=1000&q=80'
+      'https://images.unsplash.com/photo-1611591477840-025a1e7fce90?auto=format&fit=crop&w=1000&q=80'
     ],
-    stock_quantity: 5, // Low stock: triggers "Only 5 Left!"
-    category: 'Necklaces & Chokers',
+    stock_quantity: 9, // Low stock: "Only 2 Left!"
+    category: 'Bangles',
     is_published: true,
     low_stock_threshold: 5,
     specs: {
-      metalPurity: '22K Gold Finish on Copper',
-      stoneType: 'Royal Sapphire Simulants & Natural Oval Pearls',
-      weightGrams: 90,
-      craftsmanship: 'Hand-knotted triple thread strands'
+      metalPurity: 'Stainless Steel, Gold Tone',
+      stoneType: 'Glass Beads',
+      weightGrams: 15,
+      craftsmanship: 'Elastic stretch fit'
     }
   }
 ];
@@ -171,24 +162,23 @@ export const INITIAL_ORDERS: Order[] = [
     whatsapp_phone: '+923001234567',
     address_line: 'House 42-B, Street 9, Phase 5 DHA',
     city: 'Lahore',
-    subtotal_pkr: 42500,
-    shipping_fee_pkr: 0, // Free shipping on high value
-    total_amount_pkr: 42500,
+    subtotal_pkr: 950,
+    shipping_fee_pkr: 250,
+    total_amount_pkr: 1200,
     payment_method: 'EasyPaisa',
     transaction_id: 'EP-984712039',
     receipt_image_url: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=600&q=80',
     items: [
       {
         product_id: 'prod-01',
-        title: 'Maharani Polki Kundan Bridal Set',
-        price_pkr: 42500,
+        title: 'Sunburst Adjustable Ring',
+        price_pkr: 950,
         quantity: 1,
-        image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=300&q=80'
+        image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=300&q=80'
       }
     ],
     order_status: 'pending',
     created_at: new Date(Date.now() - 1000 * 60 * 18).toISOString(),
-    notes: 'Please double-check the necklace dori length before dispatching.',
     stock_decremented: false
   },
   {
@@ -197,17 +187,17 @@ export const INITIAL_ORDERS: Order[] = [
     whatsapp_phone: '+923219876543',
     address_line: 'Apartment 404, Clifton Block 2',
     city: 'Karachi',
-    subtotal_pkr: 9500,
+    subtotal_pkr: 750,
     shipping_fee_pkr: 250,
-    total_amount_pkr: 9750,
+    total_amount_pkr: 1000,
     payment_method: 'COD',
     items: [
       {
         product_id: 'prod-03',
-        title: 'Chandbali Polki Jhumkas with Ruby Accents',
-        price_pkr: 9500,
+        title: 'Golden Hoop Studs',
+        price_pkr: 750,
         quantity: 1,
-        image: 'https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=300&q=80'
+        image: 'https://images.unsplash.com/photo-1630019925601-99e00ae5b1a1?auto=format&fit=crop&w=300&q=80'
       }
     ],
     order_status: 'payment_verified',
@@ -217,45 +207,29 @@ export const INITIAL_ORDERS: Order[] = [
 ];
 
 export const MERCHANT_CONFIG = {
-  storeName: 'Zariyah Fine Jewelry',
-  storeTagline: 'Bespoke Handcrafted Pakistani Jewellery',
-  whatsappNumber: '+923008765432', // Store Owner WhatsApp
-  whatsappDisplay: '+92 300 8765432',
+  storeName: 'LC Atelier by Laraib Chouhdary',
+  storeTagline: 'Adorn Yourself in Sparkle',
+  whatsappNumber: '+923188942100',
+  whatsappDisplay: '+92 318 8942100',
   currency: 'PKR',
   currencySymbol: 'Rs.',
-  shippingFlatRate: 250,
-  freeShippingThreshold: 15000,
+  shippingFlatRate: 500,
+  freeShippingThreshold: 5000, 
   paymentAccounts: {
     easypaisa: {
-      accountTitle: 'Zariyah Jewels Official',
-      accountNumber: '0300-8765432',
-      tillNumber: '549201',
-      instructions: 'Open your EasyPaisa app -> Tap Send Money / Pay Till -> Enter 0300-8765432 or Till 549201 -> Enter total PKR -> Add Order ID in remarks -> Upload screenshot below.'
+      accountTitle: 'Laraib Chouhdary',
+      accountNumber: '0318 8942100',
+      instructions: 'Open your EasyPaisa app -> Tap Send Money / Pay Till -> Enter 0318 8942100 or Till 549201 -> Enter total PKR -> Add Order ID in remarks -> Upload screenshot below.'
     },
     jazzcash: {
-      accountTitle: 'Zariyah Jewels Official',
-      accountNumber: '0301-8765432',
-      tillNumber: '891044',
-      instructions: 'Open your JazzCash app -> Tap Money Transfer / Merchant Pay -> Enter 0301-8765432 -> Enter exact PKR amount -> Capture screenshot with TID.'
-    },
-    cod: {
-      description: 'Pay cash upon delivery to the courier rider at your doorstep. Please keep exact change ready for swift handover.'
+      accountTitle: 'Laraib Chouhdary',
+      accountNumber: '0318 8942100',
+      instructions: 'Open your JazzCash app -> Tap Money Transfer / Merchant Pay -> Enter 0318 8942100 -> Enter exact PKR amount -> Capture screenshot with TID.'
     }
   },
   majorCities: [
-    'Karachi',
-    'Lahore',
-    'Islamabad',
-    'Rawalpindi',
-    'Faisalabad',
-    'Peshawar',
-    'Multan',
-    'Quetta',
-    'Sialkot',
-    'Gujranwala',
-    'Hyderabad',
-    'Abbottabad',
-    'Bahawalpur',
-    'Other Pakistan City'
+    'Karachi', 'Lahore', 'Islamabad', 'Rawalpindi', 'Faisalabad',
+    'Peshawar', 'Multan', 'Quetta', 'Sialkot', 'Gujranwala',
+    'Hyderabad', 'Abbottabad', 'Bahawalpur', 'Other Pakistan City','Mianwali','Bhakkar','Daryakhan'
   ]
 };

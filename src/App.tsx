@@ -18,7 +18,7 @@ import { INITIAL_PRODUCTS, INITIAL_ORDERS } from './data/initialData';
 import { Sparkles, Heart, ShieldCheck, Truck, Phone, MessageCircle } from 'lucide-react';
 import { MERCHANT_CONFIG } from './data/initialData';
 import { LoginModal } from './components/LoginModal';
-
+import atelierLogo from './assets/LC_Atelier_By_Laraib_logo.jpeg';
 export default function App() {
   // Core Data State
   const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
@@ -54,7 +54,11 @@ export default function App() {
 
   const fetchOrders = useCallback(async () => {
     try {
-      const res = await fetch('/api/orders');
+      const res = await fetch('/api/orders', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        }
+      });
       if (res.ok) {
         const data = await res.json();
         if (data.success && Array.isArray(data.orders)) {
@@ -70,6 +74,12 @@ export default function App() {
     fetchProducts();
     fetchOrders();
   }, [fetchProducts, fetchOrders]);
+
+  useEffect(() => {
+    if (window.location.pathname === '/admin') {
+      setIsLoginModalOpen(true);
+    }
+  }, []);
 
   // Cart Handlers
   const handleAddToCart = (product: Product, quantityToAdd: number = 1) => {
@@ -116,18 +126,20 @@ export default function App() {
     setCompletedOrder(order);
     fetchOrders();
   };
-
   const handleAdminToggleClick = () => {
     if (isAdminView) {
       setIsAdminView(false);
+      window.history.pushState({}, '', '/');
     } else {
       setIsLoginModalOpen(true);
     }
   };
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (token: string) => {
+    localStorage.setItem('adminToken', token);
     setIsAdminView(true);
     setIsLoginModalOpen(false);
+    window.history.pushState({}, '', '/admin');
   };
 
   // Admin Order Status Update (Triggers Stock Decrement on 'Confirmed' - FR-07)
@@ -135,7 +147,10 @@ export default function App() {
     try {
       const res = await fetch(`/api/orders/${orderId}/status`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        },
         body: JSON.stringify({ status: newStatus })
       });
       const data = await res.json();
@@ -148,12 +163,32 @@ export default function App() {
     }
   };
 
+  const handleDeleteOrder = async (orderId: string) => {
+    try {
+      const res = await fetch(`/api/orders/${orderId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        }
+      });
+      const data = await res.json();
+      if (data.success) {
+        await fetchOrders();
+      }
+    } catch (err) {
+      console.error('Failed to delete order', err);
+    }
+  };
+
   // Admin Product CRUD
   const handleAddProduct = async (productData: Partial<Product>) => {
     try {
       const res = await fetch('/api/products', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        },
         body: JSON.stringify(productData)
       });
       if (res.ok) {
@@ -168,7 +203,10 @@ export default function App() {
     try {
       const res = await fetch(`/api/products/${productId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        },
         body: JSON.stringify(updates)
       });
       if (res.ok) {
@@ -182,7 +220,10 @@ export default function App() {
   const handleDeleteProduct = async (productId: string) => {
     try {
       const res = await fetch(`/api/products/${productId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        }
       });
       if (res.ok) {
         await fetchProducts();
@@ -234,6 +275,7 @@ export default function App() {
             onAddProduct={handleAddProduct}
             onUpdateProduct={handleUpdateProduct}
             onDeleteProduct={handleDeleteProduct}
+            onDeleteOrder={handleDeleteOrder}
           />
         ) : (
           /* Customer Storefront View */
@@ -253,7 +295,7 @@ export default function App() {
                     </span>
                   </h2>
                   <p className="text-xs text-[#5F6B6C] mt-0.5">
-                    Authentic Pakistani fine jewelry handcrafted with uncut Polki, 22K gold dip, and Basra pearls.
+                    Authentic Pakistani fine casual-wear & occasional jewelry
                   </p>
                 </div>
 
@@ -310,24 +352,28 @@ export default function App() {
               {/* Brand Col */}
               <div className="space-y-3 md:col-span-2">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-[#C5A059] text-[#1A3636] font-serif-title font-bold flex items-center justify-center text-base">
-                    Z
-                  </div>
+                  <img
+                    src={atelierLogo}
+                    alt="Atelier by Laraib Chouhdary"
+                    className="w-8 h-8 rounded-full object-cover border border-[#C5A059]"
+                  />
                   <span className="font-serif-title text-xl font-bold tracking-tight text-white">
-                    ZARIYAH FINE JEWELRY
+                    LC ATELIER BY LARAIB CHOUHDARY
                   </span>
                 </div>
                 <p className="text-xs text-gray-300 max-w-md leading-relaxed">
-                  Bespoke handcrafted Pakistani bridal and artisanal jewellery. Every piece is human-verified before dispatch to ensure heirloom quality and flawless sizing.
+                  Everyday jewelry, made affordable. Every order is human-verified via WhatsApp before dispatch, so you always know your order is confirmed.
                 </p>
                 <div className="flex items-center gap-4 text-xs text-[#C5A059] pt-1">
                   <span>Lahore</span>
                   <span>•</span>
-                  <span>Karachi</span>
+                  <span>Bhakkar</span>
                   <span>•</span>
-                  <span>Islamabad</span>
+                  <span>Piplan</span>
                   <span>•</span>
-                  <span>Nationwide Express</span>
+                  <span>DaryaKhan</span>
+                  <span>•</span>
+                  <span>Nationwide Delivery</span>
                 </div>
               </div>
 
@@ -337,9 +383,8 @@ export default function App() {
                   Verified Payment Options
                 </div>
                 <ul className="space-y-1.5 text-gray-300">
-                  <li>• Cash on Delivery (COD) across Pakistan</li>
-                  <li>• EasyPaisa Mobile Transfer & Till Pay</li>
-                  <li>• JazzCash App & Direct Mobile Pay</li>
+                  <li>• EasyPaisa Mobile Transfer</li>
+                  <li>• Direct Mobile Pay</li>
                   <li>• All prices strictly listed in PKR (Rs.)</li>
                 </ul>
               </div>
@@ -347,7 +392,7 @@ export default function App() {
               {/* WhatsApp Support */}
               <div className="space-y-2 text-xs">
                 <div className="font-serif-title font-bold text-sm text-[#C5A059]">
-                  Artisan & Order Support
+                  Order Support
                 </div>
                 <p className="text-gray-300">
                   Instant human verification via WhatsApp:
@@ -365,12 +410,7 @@ export default function App() {
             </div>
 
             <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-[11px] text-gray-400 gap-2">
-              <p>© {new Date().getFullYear()} Zariyah Fine Jewelry. Zero-cost deployment architecture.</p>
-              <div className="flex items-center gap-3">
-                <span>Free-tier MongoDB Schema Ready</span>
-                <span>•</span>
-                <span>Node/Express Backend</span>
-              </div>
+              <p>© {new Date().getFullYear()} LC Atelier by Laraib Chouhdary. All rights reserved.</p>
             </div>
           </div>
         </footer>
@@ -383,6 +423,7 @@ export default function App() {
         onAddToCart={(p, qty) => handleAddToCart(p, qty)}
         isItemInCart={Boolean(selectedProduct && cart.some((i) => i.product.id === selectedProduct.id))}
       />
+
 
       {/* Cart Drawer */}
       <CartDrawer

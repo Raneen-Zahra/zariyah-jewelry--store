@@ -1,12 +1,9 @@
 export type ProductCategory =
   | 'All'
-  | 'Bridal Sets'
-  | 'Necklaces & Chokers'
-  | 'Earrings & Jhumkas'
+  | 'Earrings'
+  | 'Lockets'
   | 'Rings'
-  | 'Bangles & Bracelets'
-  | 'Pendants & Chains'
-  | 'Anklets';
+  | 'Bangles'
 
 export interface Product {
   id: string;
